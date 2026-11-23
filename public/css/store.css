@@ -898,3 +898,8 @@ input[type="checkbox"] { display: inline-block; width: auto; margin: 0 8px 0 0; 
 .summary-line { display: flex; justify-content: space-between; margin-top: 8px; }
 .summary-total { font-size: 20px; font-weight: 700; margin-top: 8px; color: #2f5d3f; }
 .validation-error { color: #b91c1c; }
+
+/* ===== Tambahan M7: dashboard ===== */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.grid .card { margin: 0; }
+.grid .card strong { font-size: 22px; }
