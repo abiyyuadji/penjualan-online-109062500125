@@ -893,3 +893,8 @@ input[type="checkbox"] { display: inline-block; width: auto; margin: 0 8px 0 0; 
 .pagination .active { font-weight: 600; }
 .pagination [aria-disabled="true"] { color: #9ca3af; }
 .row form { margin: 0; }
+
+/* ===== Tambahan M6: checkout ===== */
+.summary-line { display: flex; justify-content: space-between; margin-top: 8px; }
+.summary-total { font-size: 20px; font-weight: 700; margin-top: 8px; color: #2f5d3f; }
+.validation-error { color: #b91c1c; }
