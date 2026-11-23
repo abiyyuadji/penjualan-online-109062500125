@@ -1,58 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Penjualan Online
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi penjualan online dengan dua peran (Admin dan Pelanggan) untuk praktikum Pengembangan Aplikasi Web. Dibuat dengan Laravel 13, PHP 8.3, MySQL, Blade, dan Eloquent.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Pelanggan**
+- Registrasi dan login
+- Katalog produk dengan pencarian, filter kategori, filter harga, stok tersedia, pengurutan, dan pagination
+- Detail produk (berdasarkan slug)
+- Keranjang belanja berbasis session
+- Checkout dengan pilihan ekspedisi
+- Riwayat dan detail pesanan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Admin**
+- Dashboard ringkasan
+- Kelola kategori dan produk (termasuk unggah gambar)
+- Barang masuk dan histori stok (IN dan OUT)
+- Kelola layanan ekspedisi
+- Daftar transaksi, validasi, pembatalan dengan pengembalian stok, dan perubahan status
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Aspek teknis**
+- Akses dibatasi middleware `role:admin` dan `role:customer`
+- Checkout memakai `DB::transaction()` dan `lockForUpdate()` untuk mencegah overselling
+- Nama dan harga produk disimpan sebagai snapshot di `order_items`
+- Alur status: pending, confirmed, processed, shipped, completed (atau cancelled)
 
-## Learning Laravel
+## Kebutuhan
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.3 atau lebih baru
+- Composer
+- MySQL atau MariaDB
+- Git
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalasi
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <alamat-repository> penjualan-online
+cd penjualan-online
+composer install
+copy .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Buat database `laravel_online_sales`, lalu atur bagian database di `.env`:
 
-## Contributing
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_online_sales
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Lanjutkan:
 
-## Code of Conduct
+```bash
+php artisan migrate
+php artisan db:seed
+php artisan storage:link
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Buka `http://127.0.0.1:8000`.
 
-## Security Vulnerabilities
+## Akun latihan (hanya untuk lokal)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Peran | Email | Password |
+|---|---|---|
+| Admin | admin@example.com | Admin12345! |
+| Pelanggan | abiyyutes1@gmail.com | 12345678 |
+| Pelanggan | abiyyutes2@gmail.com | 87654321 |
 
-## License
+Jangan memakai akun ini di server sungguhan.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Panduan pengujian
+
+1. Login admin, tambah kategori dan produk (dengan gambar), lalu catat barang masuk.
+2. Login pelanggan, cari produk, tambah ke keranjang, lalu checkout.
+3. Login admin, validasi pesanan, lalu ubah status sampai completed.
+4. Batalkan satu pesanan pending dan pastikan stok kembali.
+5. Pastikan pelanggan yang membuka `/admin` mendapat halaman 403.
+
+## Milestone Git
+
+| Milestone | Fokus | Tag |
+|---|---|---|
+| M0 | Setup proyek | m0-setup |
+| M1 | Autentikasi dan role | m1-auth-role |
+| M2 | Kategori dan produk | m2-master-product |
+| M3 | Barang masuk, stok, ekspedisi | m3-inventory-shipping |
+| M4 | Katalog toko | m4-storefront |
+| M5 | Keranjang | m5-cart |
+| M6 | Checkout | m6-checkout |
+| M7 | Admin transaksi | m7-order-admin |
+| M8 | QA dan dokumentasi | m8-final |
+
+## Catatan
+
+- Zona waktu bawaan Laravel adalah UTC. Untuk WIB, tambahkan `APP_TIMEZONE=Asia/Jakarta` di `.env`, lalu jalankan `php artisan config:clear`.
+- Keranjang disimpan di session, sehingga kosong setelah logout.
